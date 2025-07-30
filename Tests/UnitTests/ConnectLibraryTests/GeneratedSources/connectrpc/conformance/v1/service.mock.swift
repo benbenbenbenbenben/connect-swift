@@ -5,7 +5,9 @@
 // Source: connectrpc/conformance/v1/service.proto
 //
 
-import Combine
+#if canImport(Combine)
+    import Combine
+#endif
 import Connect
 import ConnectMocks
 import Foundation

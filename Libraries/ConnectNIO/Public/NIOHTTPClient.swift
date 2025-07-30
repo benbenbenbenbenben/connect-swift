@@ -17,7 +17,7 @@ import Foundation
 import NIOConcurrencyHelpers
 @preconcurrency import NIOCore
 import NIOHTTP1
-import NIOHTTP2
+@preconcurrency import NIOHTTP2
 import NIOPosix
 @preconcurrency import NIOSSL
 #if canImport(os.Log)

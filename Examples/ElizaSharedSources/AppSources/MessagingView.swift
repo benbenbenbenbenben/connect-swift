@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Combine
+#if canImport(Combine)
+    import Combine
+#endif
 import SwiftUI
 
 struct MessagingView<ViewModel: MessagingViewModel>: View {

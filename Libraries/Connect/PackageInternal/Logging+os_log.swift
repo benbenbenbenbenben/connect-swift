@@ -1,7 +1,7 @@
 #if !canImport(os.Log)
     import Logging
     let logger = Logger(label: "com.example.connect")
-    func os_log(
+    public func os_log(
         _ level: Logger.Level,
         _ message: String,
         _ args: CVarArg...

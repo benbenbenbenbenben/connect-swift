@@ -67,6 +67,10 @@ let package = Package(
             url: "https://github.com/apple/swift-log.git",
             from: "1.6.4"
         ),
+        .package(
+            url: "https://github.com/OpenCombine/OpenCombine.git",
+            from: "0.14.0"
+        ),
     ],
     targets: [
         .target(
@@ -127,6 +131,7 @@ let package = Package(
             dependencies: [
                 .target(name: "Connect"),
                 .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+                .product(name: "OpenCombine", package: "opencombine", condition: .when(platforms: [.linux])),
             ],
             path: "Libraries/ConnectMocks",
             exclude: [
