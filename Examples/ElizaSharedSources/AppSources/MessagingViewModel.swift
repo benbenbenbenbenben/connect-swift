@@ -14,7 +14,11 @@
 
 import Combine
 import Connect
-import os.log
+#if canImport(os.Log)
+    import os.Log
+#else
+    import Logging
+#endif
 
 private typealias ConverseRequest = Connectrpc_Eliza_V1_ConverseRequest
 private typealias ConverseResponse = Connectrpc_Eliza_V1_ConverseResponse

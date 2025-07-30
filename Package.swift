@@ -22,7 +22,7 @@ let package = Package(
         .iOS(.v12),
         .macOS(.v10_15),
         .tvOS(.v13),
-        .watchOS(.v6)
+        .watchOS(.v6),
     ],
     products: [
         .library(
@@ -63,18 +63,34 @@ let package = Package(
             url: "https://github.com/apple/swift-protobuf.git",
             from: "1.30.0"
         ),
+        .package(
+            url: "https://github.com/apple/swift-log.git",
+            from: "1.6.4"
+        ),
     ],
     targets: [
         .target(
             name: "Connect",
             dependencies: [
                 .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+                .product(name: "Logging", package: "swift-log"),
+                .byName(name: "ZlibLinux", condition: .when(platforms: [.linux])),
+                .product(name: "NIOCore", package: "swift-nio", condition: .when(platforms: [.linux])),
+                .product(name: "NIOConcurrencyHelpers", package: "swift-nio", condition: .when(platforms: [.linux])),
             ],
             path: "Libraries/Connect",
             exclude: [
                 "buf.gen.yaml",
                 "proto",
                 "README.md",
+            ]
+        ),
+        .target(
+            name: "ZlibLinux",
+            dependencies: [],
+            path: "Libraries/ZlibLinux",
+            linkerSettings: [
+                .linkedLibrary("z")
             ]
         ),
         .executableTarget(
@@ -100,10 +116,10 @@ let package = Package(
             ],
             path: "Tests/UnitTests/ConnectLibraryTests",
             exclude: [
-                "buf.gen.yaml",
+                "buf.gen.yaml"
             ],
             resources: [
-                .copy("TestResources"),
+                .copy("TestResources")
             ]
         ),
         .target(
@@ -114,7 +130,7 @@ let package = Package(
             ],
             path: "Libraries/ConnectMocks",
             exclude: [
-                "README.md",
+                "README.md"
             ]
         ),
         .executableTarget(
@@ -139,7 +155,7 @@ let package = Package(
             ],
             path: "Libraries/ConnectNIO",
             exclude: [
-                "README.md",
+                "README.md"
             ]
         ),
         .target(
@@ -153,7 +169,7 @@ let package = Package(
         .testTarget(
             name: "ConnectPluginUtilitiesTests",
             dependencies: [
-                "ConnectPluginUtilities",
+                "ConnectPluginUtilities"
             ],
             path: "Tests/UnitTests/ConnectPluginUtilitiesTests"
         ),

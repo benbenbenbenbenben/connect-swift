@@ -13,7 +13,14 @@
 // limitations under the License.
 
 import Foundation
-import os.log
+#if canImport(os.Log)
+    import os.Log
+#else
+    import Logging
+#endif
+#if canImport(FoundationNetworking) 
+    import FoundationNetworking
+#endif
 
 /// Concrete implementation of `HTTPClientInterface` backed by `URLSession`.
 ///

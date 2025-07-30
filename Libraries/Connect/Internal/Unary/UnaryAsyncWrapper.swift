@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import os.log
+#if canImport(os.Log)
+    import os.Log
+#else
+    import Logging
+#endif
 import SwiftProtobuf
 
 /// Internal actor used to wrap closure-based unary API calls in a way that allows them

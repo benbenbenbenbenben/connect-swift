@@ -20,7 +20,11 @@ import NIOHTTP1
 import NIOHTTP2
 import NIOPosix
 @preconcurrency import NIOSSL
-import os.log
+#if canImport(os.Log)
+    import os.Log
+#else
+    import Logging
+#endif
 
 /// HTTP client powered by Swift NIO which supports trailers (unlike URLSession).
 open class NIOHTTPClient: Connect.HTTPClientInterface, @unchecked Sendable {

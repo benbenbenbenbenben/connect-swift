@@ -1,4 +1,4 @@
-// Copyright 2022-2025 The Connect Authors
+// Copyright 2022-2024 The Connect Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,17 +11,3 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-import Foundation
-#if canImport(FoundationNetworking)
-    import FoundationNetworking
-#endif
-
-/// Contains metrics collected during the span of an HTTP request.
-public struct HTTPMetrics: Sendable {
-    public let taskMetrics: URLSessionTaskMetrics?
-
-    public init(taskMetrics: URLSessionTaskMetrics?) {
-        self.taskMetrics = taskMetrics
-    }
-}

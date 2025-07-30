@@ -13,7 +13,11 @@
 // limitations under the License.
 
 import Foundation
-import os.log
+#if canImport(os.Log)
+    import os.Log
+#else
+    import Logging
+#endif
 import SwiftProtobuf
 
 /// Concrete implementation of the `ProtocolClientInterface`.

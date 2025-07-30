@@ -13,7 +13,12 @@
 // limitations under the License.
 
 import Foundation
-import zlib
+
+#if os(Linux)
+    import ZlibLinux
+#else
+    import zlib
+#endif
 
 /// Compression pool that handles gzip compression/decompression.
 public struct GzipCompressionPool: Sendable {
@@ -50,7 +55,7 @@ extension GzipCompressionPool: CompressionPool {
             throw GzipError.failedToInitialize
         }
 
-        let chunkSize = 16_384 // Standard chunk size
+        let chunkSize = 16_384  // Standard chunk size
         var output = Data(capacity: chunkSize)
         repeat {
             if stream.total_out >= output.count {
@@ -137,8 +142,8 @@ extension GzipCompressionPool: CompressionPool {
     }
 }
 
-private extension Data {
-    func isGzipped() -> Bool {
+extension Data {
+    fileprivate func isGzipped() -> Bool {
         return self.starts(with: [0x1f, 0x8b])
     }
 }
