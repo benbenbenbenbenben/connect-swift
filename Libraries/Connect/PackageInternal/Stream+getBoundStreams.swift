@@ -15,7 +15,20 @@ import Foundation
             inputStream: inout InputStream?,
             outputStream: inout OutputStream?
         ) {
-            // TODO: no-op for FoundationNetworking, as it does not support this method.
+            // Linux implementation using POSIX pipe
+            var fds: [Int32] = [0, 0]
+            guard pipe(&fds) == 0 else {
+                inputStream = nil
+                outputStream = nil
+                return
+            }
+            // Buffer size logic omitted for portability.
+            let inPath = "/dev/fd/\(fds[0])"
+            let outPath = "/dev/fd/\(fds[1])"
+            inputStream = InputStream(fileAtPath: inPath)
+            outputStream = OutputStream(toFileAtPath: outPath, append: false)
+            if inputStream == nil { inputStream = nil }
+            if outputStream == nil { outputStream = nil }
         }
     }
 #endif

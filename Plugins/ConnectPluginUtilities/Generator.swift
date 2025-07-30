@@ -91,12 +91,40 @@ open class Generator {
         }
     }
 
-    public func printModuleImports(adding additional: [String] = []) {
+    public func printModuleImports(adding additional: [ImportReference] = []) {
         let defaults = ["Connect", "Foundation", self.options.swiftProtobufModuleName]
         let extraOptionImports = self.options.extraModuleImports
-        let allImports = (defaults + self.neededModules + extraOptionImports + additional).sorted()
+        let allImports = (defaults + self.neededModules + extraOptionImports).sorted()
         for module in allImports {
             self.printLine("import \(module)")
+        }
+        for additionalImport in additional {
+            self.printLine(additionalImport.importStatement)
+        }
+    }
+
+    public enum ImportReference: ExpressibleByStringLiteral {
+        case universal(String)
+        case canImport(either: String, or: String)
+        var importStatement: String {
+            switch self {
+            case .universal(let module):
+                return "import \(module)"
+            case .canImport(let either, let or):
+                return """
+                    #if canImport(\(either))
+                        import \(either)
+                    #else
+                        import \(or)
+                    #endif
+                    """
+            }
+        }
+        public init(stringLiteral value: String) {
+            self = .universal(value)
+        }
+        public init(either: String, or: String) {
+            self = .canImport(either: either, or: or)
         }
     }
 }
@@ -109,7 +137,8 @@ extension Generator: SwiftProtobufPluginLibrary.CodeGenerator {
             currentFile: descriptor,
             protoFileToModuleMappings: self.options.protoToModuleMappings
         )
-        self.neededModules = self.options.protoToModuleMappings
+        self.neededModules =
+            self.options.protoToModuleMappings
             .neededModules(forFile: descriptor) ?? []
         self.services = descriptor.services
         self.printer = SwiftProtobufPluginLibrary.CodePrinter(indent: "    ".unicodeScalars)
@@ -151,9 +180,9 @@ extension Generator: SwiftProtobufPluginLibrary.CodeGenerator {
         return minEdition...maxEdition
     }
 
-    public var supportedFeatures: [
-        SwiftProtobufPluginLibrary.Google_Protobuf_Compiler_CodeGeneratorResponse.Feature
-    ] {
+    public var supportedFeatures:
+        [SwiftProtobufPluginLibrary.Google_Protobuf_Compiler_CodeGeneratorResponse.Feature]
+    {
         return [
             .proto3Optional,
             .supportsEditions,

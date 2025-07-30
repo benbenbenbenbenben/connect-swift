@@ -7,9 +7,14 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"swiftlang.swift-vscode"
+				"swiftlang.swift-vscode",
+				"RooVeterinaryInc.roo-cline"
 			]
 		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/go:1": {},
+		"ghcr.io/dotnet/aspire-devcontainer-feature/dotnetaspire:1": {}
 	}
 
 	// Features to add to the dev container. More info: https://containers.dev/features.

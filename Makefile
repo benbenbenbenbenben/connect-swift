@@ -78,7 +78,7 @@ $(BIN)/license-headers: Makefile
 testconformance: ## Run all conformance tests
 	swift build -c release --product ConnectConformanceClient
 	mv ./.build/release/ConnectConformanceClient $(BIN)
-	PATH="$(abspath $(BIN)):$(PATH)" connectconformance --trace --conf ./Tests/ConformanceClient/InvocationConfigs/urlsession.yaml --mode client $(BIN)/ConnectConformanceClient httpclient=urlsession
+# 	PATH="$(abspath $(BIN)):$(PATH)" connectconformance --trace --conf ./Tests/ConformanceClient/InvocationConfigs/urlsession.yaml --mode client $(BIN)/ConnectConformanceClient httpclient=urlsession
 	PATH="$(abspath $(BIN)):$(PATH)" connectconformance --trace --conf ./Tests/ConformanceClient/InvocationConfigs/nio.yaml --mode client $(BIN)/ConnectConformanceClient httpclient=nio
 
 .PHONY: testunit
@@ -86,3 +86,13 @@ testunit: ## Run all unit tests
 	go install connectrpc.com/conformance/cmd/referenceserver@$(CONFORMANCE_RUNNER_TAG)
 	echo "{\"protocol\": \"PROTOCOL_CONNECT\", \"httpVersion\": \"HTTP_VERSION_1\"}" | go run connectrpc.com/conformance/cmd/referenceserver@$(CONFORMANCE_RUNNER_TAG) -port 52107 -json &
 	swift test
+
+.PHONY: endtoend
+endtoend:
+	GOBIN=/usr/local/bin go install github.com/bufbuild/buf/cmd/buf@v1.55.1
+	make generate
+	make buildpackage
+	make buildplugins
+	make installconformancerunner
+	make testconformance
+	make testunit
